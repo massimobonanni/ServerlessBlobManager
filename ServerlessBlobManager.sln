@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34221.43
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerlessBlobManager.Functions", "ServerlessBlobManager.Functions\ServerlessBlobManager.Functions.csproj", "{587A0CF4-9C19-495C-8712-7FC9C91F3388}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{587A0CF4-9C19-495C-8712-7FC9C91F3388}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{587A0CF4-9C19-495C-8712-7FC9C91F3388}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{587A0CF4-9C19-495C-8712-7FC9C91F3388}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{587A0CF4-9C19-495C-8712-7FC9C91F3388}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C427606C-BBD2-4E52-8D5F-AC7FD2A96623}
+	EndGlobalSection
+EndGlobal

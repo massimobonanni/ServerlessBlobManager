@@ -1,0 +1,22 @@
+{
+  "topic": "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxx/providers/Microsoft.Storage/storageAccounts/twitteranalysisdemostore",
+  "subject": "/blobServices/default/containers/positive/blobs/1583054820440952833.txt",
+  "eventType": "Microsoft.Storage.BlobDeleted",
+  "id": "2a11f75f-e01e-0059-5913-49337706190d",
+  "data": {
+    "api": "DeleteBlob",
+    "requestId": "2a11f75f-e01e-0059-5913-493377000000",
+    "eTag": "0x8DAB28CFFEF5092",
+    "contentType": "application/octet-stream",
+    "contentLength": 184,
+    "blobType": "BlockBlob",
+    "url": "https://twitteranalysisdemostore.blob.core.windows.net/positive/1583054820440952833.txt",
+    "sequencer": "0000000000000000000000000003D1FE00000000002e1b87",
+    "storageDiagnostics": {
+      "batchId": "799e519c-4006-0039-0013-497655000000"
+    }
+  },
+  "dataVersion": "",
+  "metadataVersion": "1",
+  "eventTime": "2023-02-25T12:21:16.7159046Z"
+}
