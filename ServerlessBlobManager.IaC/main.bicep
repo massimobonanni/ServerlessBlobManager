@@ -17,7 +17,7 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
 
 module resourcesModule 'resources.bicep' = {
   scope: resourceGroup
-  name: 'resources'
+  name: 'resources-${deployment().name}'
   params: {
     location: location
     environmentName: environmentName
@@ -26,7 +26,7 @@ module resourcesModule 'resources.bicep' = {
 
 module eventGridViewer 'eventGridViewer.bicep' = {
   scope: resourceGroup
-  name: 'eventGridViewer'
+  name: 'eventGridViewer-${deployment().name}'
   params: {
     location: location
     environmentName: environmentName

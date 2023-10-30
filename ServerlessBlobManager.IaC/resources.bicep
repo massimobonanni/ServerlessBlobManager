@@ -93,6 +93,16 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   }
 }
 
+resource functionAppStorageRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+  name: guid('Storage Blob Data Contributor', functionAppName, subscription().subscriptionId)
+  scope: storageAccount
+  properties: {
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe') // this is the role "Storage Blob Data Contributor"
+    principalId: functionApp.identity.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
+
 resource appSettings 'Microsoft.Web/sites/config@2022-03-01' = {
   name: 'appsettings'
   parent: functionApp
@@ -124,12 +134,13 @@ resource eventGridTopic 'Microsoft.EventGrid/systemTopics@2023-06-01-preview' = 
   }
 }
 
+/* 
 resource eventGridSubscription 'Microsoft.EventGrid/systemTopics/eventSubscriptions@2021-06-01-preview' = {
   parent: eventGridTopic
   name: eventGridSubName
   properties: {
     destination: {
-      endpointType:'AzureFunction'
+      endpointType: 'AzureFunction'
       properties: {
         resourceId: functionApp.id
         maxEventsPerBatch: 1
@@ -141,6 +152,6 @@ resource eventGridSubscription 'Microsoft.EventGrid/systemTopics/eventSubscripti
       ]
     }
   }
-}
+} */
 
 output eventGridTopicName string = eventGridTopic.name
