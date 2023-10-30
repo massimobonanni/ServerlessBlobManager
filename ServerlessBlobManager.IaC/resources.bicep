@@ -119,7 +119,7 @@ resource eventGridTopic 'Microsoft.EventGrid/systemTopics@2023-06-01-preview' = 
   name: eventGridTopicName
   location: location
   properties: {
-    source: resourceId('Microsoft.Storage/storageAccounts',storageAccount.id)
+    source: storageAccount.id
     topicType: 'Microsoft.Storage.StorageAccounts'
   }
 }
