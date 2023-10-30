@@ -76,9 +76,9 @@ resource eventGridTopic 'Microsoft.EventGrid/systemTopics@2023-06-01-preview' ex
   name: eventGridTopicName
 }
 
-resource eventViewerSubscription 'Microsoft.EventGrid/eventSubscriptions@2022-06-15' = {
+resource eventViewerSubscription 'Microsoft.EventGrid/systemTopics/eventSubscriptions@2023-06-01-preview' = {
   name: eventViewerSubName
-  scope: eventGridTopic
+  parent: eventGridTopic
   properties: {
     destination: {
       endpointType: 'WebHook'
