@@ -72,7 +72,7 @@ resource eventViewerAppServiceDeploy 'Microsoft.Web/sites/sourcecontrols@2022-03
 //-------------------------------------------------------------
 var eventViewerSubName=toLower('${environmentName}-eventviewersub')
 
-resource eventGridTopic 'Microsoft.EventGrid/topics@2022-06-15' existing = {
+resource eventGridTopic 'Microsoft.EventGrid/systemTopics@2023-06-01-preview' existing = {
   name: eventGridTopicName
 }
 
