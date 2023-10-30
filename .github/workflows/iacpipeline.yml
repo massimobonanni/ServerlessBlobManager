@@ -1,0 +1,79 @@
+name: CI/CD on IaC
+
+on:
+  workflow_dispatch:
+  push:
+    branches: 
+      - "main"
+    paths:
+      - "ServerlessBlobManager.IaC/**"
+  pull_request:
+    branches: 
+      - "main"
+    paths:
+      - "ServerlessBlobManager.IaC/**"
+      
+env: 
+  BICEP_PROJECT_PATH: '${{ github.workspace }}/ServerlessBlobManager.IaC'
+  BICEP_MAIN_TEMPLATE: 'main.bicep'
+  BUILD_OUTPUT_PATH: '${{ github.workspace }}/build-artifacts'
+  DEPLOY_LOCATION: 'westeurope' 
+  ENVIRONMENT_NAME: 'srvblobmngr'
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Azure CLI
+        run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+      - name: Install BICEP module
+        run: az bicep install
+        
+      - name: Build BICEP template
+        run: |
+          mkdir ${{ env.BUILD_OUTPUT_PATH }}
+          cd ${{ env.BUILD_OUTPUT_PATH }}
+          az bicep build --file ${{ env.BICEP_PROJECT_PATH }}/${{ env.BICEP_MAIN_TEMPLATE }} --outfile main.json
+      
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: build_artifacts
+          path: ${{ env.BUILD_OUTPUT_PATH }}
+          if-no-files-found: error
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: build_artifacts
+          path: ${{ env.BUILD_OUTPUT_PATH }}
+      
+      - name: Install Azure CLI
+        run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+        
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIAL }}
+      
+      - name: Validate ARM Template
+        run: |
+          cd ${{ env.BUILD_OUTPUT_PATH }} 
+          az deployment sub validate --location ${{ env.DEPLOY_LOCATION }} --template-file main.json --name ${{ env.deploymentName }}
+        env:
+          deploymentName: ServerlessBlobManager_${{ github.run_id }}
+          
+      - name: Deploy ARM Template
+        run: |
+          cd ${{ env.BUILD_OUTPUT_PATH }} 
+          az deployment sub create --location ${{ env.DEPLOY_LOCATION }} --template-file main.json --name ${{ env.deploymentName }}
+        env:
+          deploymentName: ServerlessBlobManager_${{ github.run_id }}
