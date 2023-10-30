@@ -1,7 +1,10 @@
-﻿using Azure.Storage;
+﻿using Azure.Core;
+using Azure.Identity;
+using Azure.Storage;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Configuration;
 using ServerlessBlobManager.Functions.Interfaces;
+using System.Net.Security;
 
 namespace ServerlessBlobManager.Functions.Services
 {
@@ -13,10 +16,12 @@ namespace ServerlessBlobManager.Functions.Services
             {
                 this.AccountName = configuration.GetValue<string>("StorageAccountName");
                 this.SharedKey = configuration.GetValue<string>("StorageAccessKey");
+                this.UseManagedIdentity = configuration.GetValue<bool>("UseManagedIdentity");
             }
 
             public string? AccountName { get; private set; }
             public string? SharedKey { get; private set; }
+            public bool UseManagedIdentity { get; set; }
         }
 
         private readonly IConfiguration configuration;
@@ -32,14 +37,29 @@ namespace ServerlessBlobManager.Functions.Services
 
         public async Task<bool> UndeleteBlobAsync(string blobUrl)
         {
-            var credential = new StorageSharedKeyCredential(configurationValues.AccountName,
-                configurationValues.SharedKey);
+            var blobClient = CreateBlobClient(blobUrl);
 
-            var blobClient = new BlobClient(new Uri(blobUrl), credential);
             var undeleteResponse = await blobClient.UndeleteAsync();
 
             return !undeleteResponse.IsError;
 
+        }
+
+        private BlobClient CreateBlobClient(string blobUrl)
+        {
+            BlobClient blobClient;
+            if (this.configurationValues.UseManagedIdentity)
+            {
+                var credential = new ManagedIdentityCredential();
+                blobClient = new BlobClient(new Uri(blobUrl), credential);
+            }
+            else
+            {
+                var credential = new StorageSharedKeyCredential(configurationValues.AccountName,
+                    configurationValues.SharedKey);
+                blobClient = new BlobClient(new Uri(blobUrl), credential);
+            }
+            return blobClient;
         }
     }
 }
