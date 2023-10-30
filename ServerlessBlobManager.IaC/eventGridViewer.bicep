@@ -86,6 +86,12 @@ resource eventViewerSubscription 'Microsoft.EventGrid/eventSubscriptions@2022-06
         endpointUrl: 'https://${eventViewerAppService.properties.defaultHostName}/api/updates' 
       }
     }
+    filter:{
+      includedEventTypes: [
+        'Microsoft.Storage.BlobDeleted'
+        'Microsoft.Storage.BlobCreated'
+      ]
+    }
   }
   dependsOn:[
     eventViewerAppServiceDeploy
