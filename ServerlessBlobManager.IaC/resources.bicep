@@ -104,9 +104,9 @@ resource appSettings 'Microsoft.Web/sites/config@2022-03-01' = {
     FUNCTIONS_EXTENSION_VERSION: '~4'
     WEBSITE_NODE_DEFAULT_VERSION: '~10'
     FUNCTIONS_WORKER_RUNTIME: 'dotnet'
-    UseManagedIdentity : true
-    StorageAccountName:storageAccountName
-    StorageAccessKey:''
+    UseManagedIdentity : '1'
+    StorageAccountName : storageAccountName
+    StorageAccessKey : ''
   }
 }
 //-------------------------------------------------------------
@@ -119,7 +119,7 @@ resource eventGridTopic 'Microsoft.EventGrid/systemTopics@2023-06-01-preview' = 
   name: eventGridTopicName
   location: location
   properties: {
-    source: storageAccount.id
+    source: resourceId('Microsoft.Storage/storageAccounts',storageAccount.id)
     topicType: 'Microsoft.Storage.StorageAccounts'
   }
 }
