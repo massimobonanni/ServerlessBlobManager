@@ -129,7 +129,7 @@ resource appSettings 'Microsoft.Web/sites/config@2022-03-01' = {
     WEBSITE_CONTENTSHARE: toLower(functionAppName)
     FUNCTIONS_EXTENSION_VERSION: '~4'
     WEBSITE_NODE_DEFAULT_VERSION: '~10'
-    FUNCTIONS_WORKER_RUNTIME: 'dotnet'
+    FUNCTIONS_WORKER_RUNTIME: 'dotnet-isolated'
     UseManagedIdentity : '1'
     StorageAccountName : storageAccountName
     StorageAccessKey : ''
