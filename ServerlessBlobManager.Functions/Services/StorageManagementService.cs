@@ -3,6 +3,7 @@ using Azure.Identity;
 using Azure.Storage;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using ServerlessBlobManager.Functions.Interfaces;
 using System.Net.Security;
 
@@ -24,11 +25,14 @@ namespace ServerlessBlobManager.Functions.Services
             public bool UseManagedIdentity { get; set; }
         }
 
+        private readonly ILogger<StorageManagementService> logger;
         private readonly IConfiguration configuration;
         private readonly Configuration configurationValues;
 
-        public StorageManagementService(IConfiguration configuration)
+        public StorageManagementService(IConfiguration configuration, 
+            ILoggerFactory loggerFactory)
         {
+            this.logger = loggerFactory.CreateLogger<StorageManagementService>();
             this.configuration = configuration;
             configurationValues = new Configuration();
             configurationValues.Load(configuration);
@@ -37,11 +41,21 @@ namespace ServerlessBlobManager.Functions.Services
 
         public async Task<bool> UndeleteBlobAsync(string blobUrl)
         {
+            this.logger.LogTrace($"Undeleteing blob {blobUrl}");
+            
             var blobClient = CreateBlobClient(blobUrl);
+            
+            try
+            {
+                var undeleteResponse = await blobClient.UndeleteAsync();
 
-            var undeleteResponse = await blobClient.UndeleteAsync();
-
-            return !undeleteResponse.IsError;
+                return !undeleteResponse.IsError;
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, $"Error undeleting blob {blobUrl}");
+                return false;
+            }
 
         }
 
