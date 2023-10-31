@@ -118,6 +118,7 @@ resource webConfig 'Microsoft.Web/sites/config@2021-03-01' = {
     alwaysOn: true
     netFrameworkVersion: 'v7.0'
   }
+}
 
 resource appSettings 'Microsoft.Web/sites/config@2022-03-01' = {
   name: 'appsettings'
