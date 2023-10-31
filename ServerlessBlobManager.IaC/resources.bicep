@@ -115,7 +115,6 @@ resource webConfig 'Microsoft.Web/sites/config@2021-03-01' = {
   name: 'web'
   parent: functionApp
   properties: {
-    alwaysOn: true
     netFrameworkVersion: 'v7.0'
   }
 }
