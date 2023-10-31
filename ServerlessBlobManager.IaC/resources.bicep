@@ -93,14 +93,6 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   }
 }
 
-resource basicCredentialPolicy 'Microsoft.Web/sites/basicPublishingCredentialsPolicies@2022-09-01'={
-  parent: functionApp
-  name:'scm'
-  properties:{
-    allow:true 
-  }
-}
-
 resource functionAppStorageRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
   name: guid('Storage Blob Data Contributor', functionAppName, subscription().subscriptionId)
   scope: storageAccount
@@ -110,6 +102,22 @@ resource functionAppStorageRoleAssignment 'Microsoft.Authorization/roleAssignmen
     principalType: 'ServicePrincipal'
   }
 }
+
+resource basicCredentialPolicy 'Microsoft.Web/sites/basicPublishingCredentialsPolicies@2022-09-01'={
+  parent: functionApp
+  name:'scm'
+  properties:{
+    allow:true 
+  }
+}
+
+resource webConfig 'Microsoft.Web/sites/config@2021-03-01' = {
+  name: 'web'
+  parent: functionApp
+  properties: {
+    alwaysOn: true
+    netFrameworkVersion: 'v7.0'
+  }
 
 resource appSettings 'Microsoft.Web/sites/config@2022-03-01' = {
   name: 'appsettings'
