@@ -29,9 +29,20 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   }
 }
 
-resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2023-01-01' ={
+resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2023-01-01' = {
   parent: storageAccount
   name: 'default'
+  properties: {
+    deleteRetentionPolicy: {
+      allowPermanentDelete: false
+      enabled: true
+      days: 7
+    }
+    containerDeleteRetentionPolicy: {
+      enabled: true
+      days: 7
+    }
+  }
 }
 
 resource containers 'Microsoft.Storage/storageAccounts/blobServices/containers@2019-06-01' = {
@@ -103,11 +114,11 @@ resource functionAppStorageRoleAssignment 'Microsoft.Authorization/roleAssignmen
   }
 }
 
-resource basicCredentialPolicy 'Microsoft.Web/sites/basicPublishingCredentialsPolicies@2022-09-01'={
+resource basicCredentialPolicy 'Microsoft.Web/sites/basicPublishingCredentialsPolicies@2022-09-01' = {
   parent: functionApp
-  name:'scm'
-  properties:{
-    allow:true 
+  name: 'scm'
+  properties: {
+    allow: true
   }
 }
 
@@ -130,13 +141,12 @@ resource appSettings 'Microsoft.Web/sites/config@2022-03-01' = {
     FUNCTIONS_EXTENSION_VERSION: '~4'
     WEBSITE_NODE_DEFAULT_VERSION: '~10'
     FUNCTIONS_WORKER_RUNTIME: 'dotnet-isolated'
-    UseManagedIdentity : '1'
-    StorageAccountName : storageAccountName
-    StorageAccessKey : ''
+    UseManagedIdentity: '1'
+    StorageAccountName: storageAccountName
+    StorageAccessKey: ''
   }
 }
 //-------------------------------------------------------------
-
 
 //-------------------------------------------------------------
 // Event Grid topic to capture the BlodDeleted event from storage
