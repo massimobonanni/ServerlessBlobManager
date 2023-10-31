@@ -93,6 +93,14 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   }
 }
 
+resource basicCredentialPolicy 'Microsoft.Web/sites/basicPublishingCredentialsPolicies@2022-09-01'={
+  parent: functionApp
+  name:'scm'
+  properties:{
+    allow:true 
+  }
+}
+
 resource functionAppStorageRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
   name: guid('Storage Blob Data Contributor', functionAppName, subscription().subscriptionId)
   scope: storageAccount
