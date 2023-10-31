@@ -141,7 +141,7 @@ resource appSettings 'Microsoft.Web/sites/config@2022-03-01' = {
     FUNCTIONS_EXTENSION_VERSION: '~4'
     WEBSITE_NODE_DEFAULT_VERSION: '~10'
     FUNCTIONS_WORKER_RUNTIME: 'dotnet-isolated'
-    UseManagedIdentity: '1'
+    UseManagedIdentity: 'true'
     StorageAccountName: storageAccountName
     StorageAccessKey: ''
   }
