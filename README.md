@@ -1,4 +1,4 @@
-# Manage Storwith Azure Functions
+# Manage Azure Storage with Azure Functions
 
 This repository contains examples of managing a storage account using a reactive approach using Event Grid and Azure Functions
 
