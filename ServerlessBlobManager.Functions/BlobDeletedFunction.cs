@@ -2,10 +2,7 @@
 // http://localhost:7071/runtime/webhooks/EventGrid?functionName={functionname}
 // https://learn.microsoft.com/en-us/azure/communication-services/how-tos/event-grid/local-testing-event-grid
 
-using System;
-using System.Runtime.CompilerServices;
 using System.Text.Json;
-using Azure.Messaging;
 using Azure.Messaging.EventGrid;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Configuration;
