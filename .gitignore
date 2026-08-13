@@ -382,6 +382,9 @@ FodyWeavers.xsd
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Azure Developer CLI local environment state
+.azure/
 *.code-workspace
 
 # Local History for Visual Studio Code
