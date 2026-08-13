@@ -15,14 +15,21 @@ namespace ServerlessBlobManager.Functions.Services
         {
             public void Load(IConfiguration configuration)
             {
-                this.AccountName = configuration.GetValue<string>("StorageAccountName");
-                this.SharedKey = configuration.GetValue<string>("StorageAccessKey");
-                this.UseManagedIdentity = configuration.GetValue<bool>("UseManagedIdentity");
+                this.ServicePrincipalClientId = configuration.GetValue<string>("ServicePrincipalClientId");
+                this.ServicePrincipalClientSecret = configuration.GetValue<string>("ServicePrincipalClientSecret");
+                this.ServicePrincipalTenantId = configuration.GetValue<string>("ServicePrincipalTenantId");
             }
 
-            public string? AccountName { get; private set; }
-            public string? SharedKey { get; private set; }
-            public bool UseManagedIdentity { get; set; }
+            public string? ServicePrincipalClientId { get; private set; }
+            public string? ServicePrincipalClientSecret { get; private set; }
+            public string? ServicePrincipalTenantId { get; private set; }
+            public bool UseManagedIdentity
+            {
+                get
+                {
+                    return string.IsNullOrEmpty(this.ServicePrincipalClientId);
+                }
+            }
         }
 
         private readonly ILogger<StorageManagementService> logger;
@@ -69,8 +76,9 @@ namespace ServerlessBlobManager.Functions.Services
             }
             else
             {
-                var credential = new StorageSharedKeyCredential(configurationValues.AccountName,
-                    configurationValues.SharedKey);
+                var credential = new ClientSecretCredential(configurationValues.ServicePrincipalTenantId,
+                    configurationValues.ServicePrincipalClientId,
+                    configurationValues.ServicePrincipalClientSecret);
                 blobClient = new BlobClient(new Uri(blobUrl), credential);
             }
             return blobClient;
