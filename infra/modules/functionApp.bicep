@@ -103,9 +103,9 @@ resource appSettings 'Microsoft.Web/sites/config@2023-12-01' = {
     WEBSITE_RUN_FROM_PACKAGE: '1'
     FUNCTIONS_EXTENSION_VERSION: '~4'
     FUNCTIONS_WORKER_RUNTIME: 'dotnet-isolated'
-    UseManagedIdentity: 'true'
-    StorageAccountName: managedStorageAccountName
-    StorageAccessKey: ''
+    ServicePrincipalClientId: ''
+    ServicePrincipalClientSecret: ''
+    ServicePrincipalTenantId: ''
   }
 }
 
