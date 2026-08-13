@@ -8,6 +8,7 @@ Bicep templates used by the [Azure Developer CLI](https://aka.ms/azd) to provisi
 infra/
 |-- main.bicep                          # subscription-scope orchestration entry point
 |-- main.parameters.json                # maps AZD environment values to Bicep parameters
+|-- abbreviations.json                  # CAF resource type prefixes used to build resource names
 |-- modules/
     |-- storage.bicep                   # the storage account to manage (soft delete enabled)
     |-- functionApp.bicep               # function app, plan, runtime storage, Application Insights

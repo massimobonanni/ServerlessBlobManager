@@ -17,8 +17,9 @@ param principalId string = ''
 @description('Set to false to skip the Event Grid Viewer web app and its subscription.')
 param deployEventGridViewer bool = true
 
+var abbrs = loadJsonContent('abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
-var resourceGroupName = 'rg-${environmentName}'
+var resourceGroupName = '${abbrs.resourcesResourceGroups}${environmentName}'
 var tags = { 'azd-env-name': environmentName }
 
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -31,7 +32,7 @@ module storage 'modules/storage.bicep' = {
   scope: resourceGroup
   name: 'storage'
   params: {
-    name: 'stdata${resourceToken}'
+    name: '${abbrs.storageStorageAccounts}data${resourceToken}'
     location: location
     tags: tags
   }
@@ -41,12 +42,12 @@ module functionApp 'modules/functionApp.bicep' = {
   scope: resourceGroup
   name: 'functionApp'
   params: {
-    name: 'func-${resourceToken}'
+    name: '${abbrs.webSitesFunctions}${resourceToken}'
     location: location
     tags: tags
-    hostingPlanName: 'plan-${resourceToken}'
-    functionStorageAccountName: 'stfunc${resourceToken}'
-    applicationInsightsName: 'appi-${resourceToken}'
+    hostingPlanName: '${abbrs.webServerFarms}${resourceToken}'
+    functionStorageAccountName: '${abbrs.storageStorageAccounts}func${resourceToken}'
+    applicationInsightsName: '${abbrs.insightsComponents}${resourceToken}'
     managedStorageAccountName: storage.outputs.name
   }
 }
@@ -74,7 +75,7 @@ module eventGrid 'modules/eventGrid.bicep' = {
   scope: resourceGroup
   name: 'eventGrid'
   params: {
-    name: 'evgt-${resourceToken}'
+    name: '${abbrs.eventGridSystemTopics}${resourceToken}'
     location: location
     tags: tags
     storageAccountId: storage.outputs.id
@@ -85,10 +86,10 @@ module eventGridViewer 'modules/eventGridViewer.bicep' = if (deployEventGridView
   scope: resourceGroup
   name: 'eventGridViewer'
   params: {
-    name: 'app-viewer-${resourceToken}'
+    name: '${abbrs.webSitesAppService}viewer-${resourceToken}'
     location: location
     tags: tags
-    hostingPlanName: 'plan-viewer-${resourceToken}'
+    hostingPlanName: '${abbrs.webServerFarms}viewer-${resourceToken}'
     eventGridTopicName: eventGrid.outputs.name
   }
 }
